@@ -1,0 +1,135 @@
+{% extends "portalapp/patient/dashboard.html" %}
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient - Patient Portal</title>
+</head>
+
+<body>
+    <div class="main-wrapper">
+
+        {% block content %}
+
+        <div class="page-wrapper">
+            <div class="content">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'patientAccount' %}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'patientMedicalRequest' %}">Medical request</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Details</li>
+                    </ol>
+                </nav>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="page-title">Blog View</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="blog-view">
+                            <article class="blog blog-single-post">
+                                <div class="blog-info clearfix">
+                                    <div class="post-thumb">
+                                        <a href="#">
+                                            <img class="img-fluid" src="{% static 'dashb/img/user.jpg' %}" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="post-info">
+                                        <h3>
+                                            {{request.patient.user.first_name}} {{request.patient.user.last_name}}
+                                        </h3>
+                                        <p>
+                                            <i aria-hidden="true" class="fa fa-calendar"></i> {{request.date_created}}
+                                        </p>
+                                        <p>
+                                            <i aria-hidden="true" class="fa fa-phone"></i> {{request.patient.phone}}
+                                        </p>
+                                    </div>
+                                    {% if request.status == 'Waiting'%}
+                                    <div class="dropdown profile-action mr-4 mt-3">
+                                        <a href="{% url 'patientRequestDetails' request.id  %}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <hr>
+                                <div class="blog-content">
+                                    <p>{{request.description}}</p>
+                                </div>
+                            </article>
+
+                            <div class="widget clearfix">
+                                <h3>Treatment</h3>
+                                {% if illnessTreatment %}
+                                <ul class="comments-list">
+                                    <li>
+                                        <div class="comment">
+                                            <div class="comment-author">
+                                                <img class="avatar bg-white" alt="" src="{% static 'dashb/img/logo-dark.png' %}">
+                                            </div>
+                                            <div class="comment-block">
+                                                <p>
+                                                    {{illnessTreatment.description}}
+                                                </p>
+                                                <span class="blog-date">{{illnessTreatment.date_confirmed}}</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                {% else %}
+                                <div class="d-flex align-items-center">
+                                    <div>
+                                        <strong>Waiting for response...</strong><br>
+                                        <span id="timer_container">Response will appear in: <b id="timer"></b>.</span>
+                                    </div>
+                                    <div class="spinner-border text-primary ml-auto" role="status" aria-hidden="true"></div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <aside class="col-md-4">
+                        <div class="card member-panel">
+                            <div class="card-header bg-white">
+                                <h4 class="card-title mb-0">Doctors</h4>
+                            </div>
+                            {% if doctors %}
+                            <div class="card-body">
+                                <ul class="contact-list">
+                                    {% for doctor in doctors %}
+                                    <li>
+                                        <div class="contact-cont">
+                                            <div class="float-left user-img m-r-10">
+                                                <a href="{% url 'patientDoctorDetails' doctor.id %}" title="{{doctor.user.first_name}} {{doctor.user.last_name}}">
+                                                    <img src="{{doctor.doc_image.url}}" alt="" class="w-40 rounded-circle">
+                                                </a>
+                                            </div>
+                                            <div class="contact-info">
+                                                <span class="contact-name text-ellipsis text-primary">DR. {{doctor.user.first_name}} {{doctor.user.last_name}}</span>
+                                                <span class="contact-date">Employee ID : {{doctor.employ_id}}</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+
+        {% endblock %}
+
+    </div>
+
+</body>
+
+</html>

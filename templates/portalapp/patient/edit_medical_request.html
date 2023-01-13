@@ -1,0 +1,81 @@
+{% extends "portalapp/patient/dashboard.html" %}
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient - Patient Portal</title>
+</head>
+
+<body>
+    <div class="main-wrapper">
+
+        {% block content %}
+
+        <div class="page-wrapper">
+            <div class="content">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'patientAccount' %}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'patientTreatment' request.id %}">Medical request</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Edit request</li>
+                    </ol>
+                </nav>
+
+                <div class="row">
+                    <div class="col-lg-8 offset-lg-2">
+                        <h4 class="page-title">Edit medical request</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 offset-lg-2">
+                        <form method="POST" action="">
+                            {% csrf_token %}
+
+                            <div class="form-group">
+                                <label>illness description</label>
+                                <textarea cols="30" rows="6" class="form-control" name="description" required>{{request.description}}</textarea>
+                            </div>
+                            <div class="m-t-20 text-center">
+                                <button type="button" class="btn btn-danger submit-btn" data-toggle="modal" data-target="#delete_request"><i class="fa fa-trash-o m-r-5"></i> Delete</button>
+                                <button type="submit" class="btn btn-primary submit-btn" name="update_request">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
+                <div id="delete_request" class="modal fade delete-modal" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-body text-center">
+                                <form action="" method="post">
+                                    {% csrf_token %}
+
+                                    <img src="{% static 'dashb/img/sent.png' %}" alt="" width="50" height="46">
+                                    <h3>Are you sure want to delete this Medical request?</h3>
+                                    <div class="m-t-20"> <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
+                                        <button type="submit" name="delete_request" class="btn btn-danger">Delete</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+        {% endblock %}
+
+    </div>
+
+</body>
+
+</html>

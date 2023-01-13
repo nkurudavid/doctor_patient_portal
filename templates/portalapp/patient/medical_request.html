@@ -1,0 +1,109 @@
+{% extends "portalapp/patient/dashboard.html" %}
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient - Patient Portal</title>
+</head>
+
+<body>
+    <div class="main-wrapper">
+
+        {% block content %}
+
+        <div class="page-wrapper">
+            <div class="content">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'patientAccount' %}">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Medical request</li>
+                    </ol>
+                </nav>
+                <div class="row">
+                    <div class="col-sm-8 col-4">
+                        <h4 class="page-title">Medical Request</h4>
+                    </div>
+                    <div class="col-sm-4 col-8 text-right m-b-30">
+                        <a class="btn btn-primary btn-rounded float-right" href="#" data-toggle="modal" data-target="#new_request">
+                            <i class="fa fa-plus"></i> Add Request
+                        </a>
+                    </div>
+                </div>
+                <div class="row ">
+                    <div class="col-md-12 ">
+                        <div class="table-responsive ">
+                            <table class="table table-border table-striped custom-table datatable mb-0 ">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th width="50% ">My illness description</th>
+                                        <th>date</th>
+                                        <th>status</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if requests %} {% for myRequest in requests %}
+                                    <tr>
+                                        <td>
+                                            {{forloop.counter}}.</td>
+                                        <td>
+                                            {{myRequest.description}}
+                                        </td>
+                                        <td>
+                                            {{myRequest.date_created}}
+                                        </td>
+                                        <td>
+                                            {% if myRequest.status == "Waiting" %}
+                                            <span class="badge badge-warning py-2">Waiting for treatment</span> {% else %}
+                                            <span class="badge badge-success py-2">Treatment found</span> {% endif %}
+                                        </td>
+                                        <td><a href="{% url 'patientTreatment' myRequest.id %}"><i class="fa fa-file"></i> View</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}{% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="new_request" class="modal fade" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="new_requestTitle">New Medical Request</h5>
+                            </div>
+                            <form action="" method="POST">
+                                {% csrf_token %}
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label>illness description</label>
+                                        <textarea cols="30" rows="6" class="form-control" name="description"></textarea>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary" name="send">Send</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        {% endblock %}
+
+    </div>
+
+</body>
+
+</html>

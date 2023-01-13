@@ -1,0 +1,77 @@
+{% extends "portalapp/patient/dashboard.html" %}
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient - Patient Portal</title>
+</head>
+
+<body>
+    <div class="main-wrapper">
+
+        {% block content %}
+
+        <div class="page-wrapper">
+            <div class="content">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'patientAccount' %}">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Doctors</li>
+                    </ol>
+                </nav>
+
+                <div class="row">
+                    <div class="col-sm-4 col-3">
+                        <h4 class="page-title">All Doctors</h4>
+                    </div>
+                </div>
+                {% if doctors %}
+                <div class="row doctor-grid">
+
+                    {% for doctor in doctors %}
+                    <div class="col-md-4 col-sm-4  col-lg-4">
+                        <div class="profile-widget">
+                            <div class="doctor-img">
+                                <a class="avatar" href="{% url 'patientDoctorDetails' doctor.id %}">
+                                    <img alt="" src="{{doctor.doc_image.url}}" height="100%">
+                                </a>
+                            </div>
+                            <h4 class="doctor-name text-ellipsis">
+                                <a class="text-primary" href="{% url 'patientDoctorDetails' doctor.id %}">
+                                    {{doctor.user.first_name}} {{doctor.user.last_name}}
+                                </a>
+                            </h4>
+                            <div class="doc-prof">
+                                {{doctor.employ_id}}
+                            </div>
+                            <div class="user-country">
+                                <i class="fa fa-envelope"></i> {{doctor.user.email}}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div>
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="see-all">
+                            <!-- <a class="see-all-btn" href="javascript:void(0);">Load More</a> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endblock %}
+
+    </div>
+
+</body>
+
+</html>

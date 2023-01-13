@@ -1,0 +1,170 @@
+{% extends "portalapp/patient/dashboard.html" %}
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient - Patient Portal</title>
+</head>
+
+<body>
+    <div class="main-wrapper">
+
+        {% block content %}
+
+        <div class="page-wrapper">
+            <div class="content">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'patientAccount' %}">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">My profile</li>
+                    </ol>
+                </nav>
+
+                <div class="row">
+                    <div class="col-sm-7 col-6">
+                        <h4 class="page-title">My Profile</h4>
+                    </div>
+                </div>
+                <div class="card-box profile-header">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="profile-view pb-4">
+                                <div class="profile-img-wrap">
+                                    <div class="profile-img">
+                                        <a href="#">
+                                            <img class="avatar" src="{% static 'dashb/img/user.jpg' %}" alt="">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="profile-basic">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="profile-info-left">
+                                                <h3 class="user-name m-t-0 mb-0">
+                                                    {{patientProfile.user.first_name}} {{patientProfile.user.last_name}}
+                                                </h3>
+                                                <div class="staff-id"><i class="fa fa-calendar"></i> Birthdate : {{patientProfile.birthdate|date:'d-M-Y'}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <ul class="personal-info">
+                                                <li>
+                                                    <span class="title">Phone:</span>
+                                                    <span class="text"><i class="fa fa-phone"></i>
+                                                        <a href="#">{{patientProfile.phone}}</a></span>
+                                                </li>
+                                                <li>
+                                                    <span class="title">Email:</span>
+                                                    <span class="text"><i class="fa fa-envelope"></i>
+                                                        <a href="#">{{patientProfile.user.email}}</a></span>
+                                                </li>
+                                                <li>
+                                                    <span class="title">Gender:</span>
+                                                    <span class="text"></i>{{patientProfile.gender}}</span>
+                                                </li>
+                                                <li>
+                                                    <span class="title">address:</span>
+                                                    <span class="text">{{patientProfile.address}}</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="content">
+                    <div class="row">
+                        <div class="col-sm-12 mt-5">
+                            <h4 class="page-title">Edit Profile</h4>
+                        </div>
+                    </div>
+                    <form method="POST" accept="">
+                        {% csrf_token %}
+
+                        <div class="card-box">
+                            <h3 class="card-title">Basic Informations</h3>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group form-focus select-focus">
+                                                <label class="focus-label">First Name</label>
+                                                <input type="text" class="form-control" placeholder="First Name" value="{{patientProfile.user.first_name}}" name="fname" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group form-focus select-focus">
+                                                <label class="focus-label">Last Name</label>
+                                                <input type="text" class="form-control" placeholder="Last Name" value="{{patientProfile.user.last_name}}" name="lname" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group form-focus select-focus">
+                                                <label class="focus-label">Birth Date</label>
+                                                <div class="cal-icon">
+                                                    <input class="form-control" type="date" value="{{patientProfile.birthdate|date:'Y-m-d'}}" name="dob" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group form-focus select-focus">
+                                                <label class="focus-label">Gender</label>
+                                                <select class="select form-control floating" name="gender" required>
+                                                    <option {% if patientProfile.gender == "MALE" %} selected {% endif %} value="male">Male</option>
+                                                    <option {% if patientProfile.gender == "FEMALE" %} selected {% endif %} value="female">Female</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-box">
+                            <h3 class="card-title">Contact Informations</h3>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group form-focus select-focus">
+                                        <label class="focus-label">address</label>
+                                        <input type="text" class="form-control floating" value="{{patientProfile.address}}" name="address" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-focus select-focus">
+                                        <label class="focus-label">Email</label>
+                                        <input type="email" class="form-control floating" disabled value="{{patientProfile.user.email}}" name="email" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-focus select-focus">
+                                        <label class="focus-label">Phone Number: <span>e.g: +2507xxxxxxxx</span></label>
+                                        <input type="tel" class="form-control floating" value="{{patientProfile.phone}}" name="phone" placeholder="e.g: +2507xxxxxxxx" minlength="13" maxlength="13" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center m-t-20">
+                            <button class="btn btn-primary submit-btn" name="update_profile" type="submit">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endblock %}
+
+    </div>
+
+</body>
+
+</html>

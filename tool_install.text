@@ -1,0 +1,11 @@
+1. Pillow for images: pip install Pillow.
+
+2. The python-phonenumbers library comes in two flavors:
+
+    # Installs phonenumbers minimal metadata
+    pip install "django-phonenumber-field[phonenumberslite]"
+
+    # Installs phonenumbers extended features (e.g. geocoding)
+    pip install "django-phonenumber-field[phonenumbers]"
+
+3.

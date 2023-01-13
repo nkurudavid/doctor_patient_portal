@@ -1,0 +1,95 @@
+{% extends "portalapp/main.html" %}
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient - Patient Portal</title>
+</head>
+
+<body>
+
+
+    {% block content %}
+
+    <header class="container-fluid">
+        <div class="container">
+            <div class="row top-row">
+                <div class="col-md-12 logo">
+                    <h2><img src="{% static 'media/logo-dark.png' %}" width="50px" alt=""> Doctor - Patient Portal</h2>
+                    <a data-toggle="collapse" data-target="#menu-jk" href="#menu-jk"><i class="fas d-block d-md-none small-menu fa-bars"></i></a>
+                </div>
+            </div>
+            <div id="menu-jk" class="nav-sectionmk bg-primary row">
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="admin/">Admin</a></li>
+                    <li><a href="doctor/">Doctor</a></li>
+                    <li><a href="{% url 'patientAccount' %}">Patient</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- ################# Slider Starts Here#######################--->
+    <div class="slider">
+        <!-- Set up your HTML -->
+        <div class="owl-carousel ">
+
+            <div class="item">
+                <div class="slider-img"><img src="{% static 'media/doctor-portal-background.jpg' %}" alt=""></div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-offset-2 col-lg-8 col-md-offset-2 col-md-8 col-sm-12 col-xs-12">
+                            <div class="slider-captions">
+                                <h1 class="slider-title">It's time for better help.</h1>
+                                <p class="slider-text hidden-xs">We can help you overcome your desease and stay healthy.</p>
+                                <a href="{% url 'patientAccount' %}" class="btn btn-info hidden-xs">Seeking for help?</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--  *************************Our Team Start Here ************************** -->
+
+    {% if doctors %}
+
+    <div class="our-team">
+        <div class="container">
+            <div class="session-title row">
+                <h2>Our Doctors</h2>
+            </div>
+            <div class="row">
+                {% for doctor in doctors %}
+                <div class="col-md-3 col-sm-6 m-auto">
+                    <div class="card-1 team-member">
+                        <img src="{{doctor.doc_image.url}}" height="270px">
+                        <p><b>DR. {{doctor.user.first_name}} {{doctor.user.last_name}}</b> <br> ({{doctor.speciality}})</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="copy bg-secondary">
+        <div class="container">
+            <a>&copy;2022 All Rights Reserved | Doctor - Patient Portal</a>
+        </div>
+    </div>
+
+
+    {% endblock %}
+
+
+</body>
+
+</html>

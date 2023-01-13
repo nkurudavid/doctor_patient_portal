@@ -1,0 +1,180 @@
+{% extends "portalapp/dash_main.html" %}
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient - Patient Portal</title>
+</head>
+
+<body>
+
+    {% block account_content %}
+    <div class="main-wrapper">
+        <!-- Includes Navbar -->
+        {% include 'portalapp/patient/includes/navbar.html' %}
+        <!-- /.Navbar -->
+
+        <!-- Includes Sidebar -->
+        {% include 'portalapp/patient/includes/sidebar.html' %}
+        <!-- /.Sidebar -->
+
+        {% block content %}
+
+        <div class="page-wrapper">
+            <div class="content">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                    </ol>
+                </nav>
+
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <div class="dash-widget">
+                            <span class="dash-widget-bg4">
+								<i class="fa fa-stethoscope" aria-hidden="true"></i>
+							</span>
+                            <div class="dash-widget-info text-right">
+                                <h3>{{request_count}}</h3>
+                                <span class="widget-title4">Request for Medical treatment <i class="fa fa-check" aria-hidden="true"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div class="dash-widget">
+                            <span class="dash-widget-bg1">
+								<i class="fa fa-user-md" aria-hidden="true"></i>
+							</span>
+                            <div class="dash-widget-info text-right">
+                                <h3>{{count_doctor}}</h3>
+                                <span class="widget-title1">Doctors <i class="fa fa-check" aria-hidden="true"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-md-6 col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title d-inline-block">Request for Medical treatment</h4> <a href="{% url 'patientMedicalRequest' %}" class="btn btn-primary float-right">View all</a>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table mb-0">
+                                        <thead class="d-none">
+                                            <tr>
+                                                <th>#</th>
+                                                <th>description</th>
+                                                <th>Status</th>
+                                                <th class="text-right"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% if requests %} {% for myRequest in requests %}
+                                            <tr>
+                                                <td>{{forloop.counter}}.</td>
+                                                <td>
+                                                    <h5 class="time-title p-0">Description</h5>
+                                                    <p>{{myRequest.description}}</p>
+                                                </td>
+                                                <td>
+                                                    <h5 class="time-title p-0">Status</h5>
+                                                    <p>
+                                                        {% if myRequest.status == "Waiting" %}
+                                                        <span class="badge badge-warning py-2">Waiting for treatment</span> {% else %}
+                                                        <span class="badge badge-success py-2">Treatment found</span> {% endif %}
+                                                    </p>
+                                                </td>
+                                                <td class="text-right pt-4">
+                                                    <a href="{% url 'patientTreatment' myRequest.id %}" class="btn btn-outline-primary btn-sm take-btn">view</a>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}{% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card member-panels">
+                            <div class="card-header bg-white">
+                                <h4 class="card-title mb-0">Doctors</h4>
+                            </div>
+                            {% if doctors %}
+                            <div class="card-body">
+                                <ul class="contact-list">
+                                    {% for doctor in doctors %}
+                                    <li>
+                                        <div class="contact-cont">
+                                            <div class="float-left user-img m-r-10">
+                                                <a href="{% url 'patientDoctorDetails' doctor.id %}" title="{{doctor.user.first_name}} {{doctor.user.last_name}}">
+                                                    <img src="{{doctor.doc_image.url}}" alt="" class="w-40 rounded-circle">
+                                                </a>
+                                            </div>
+                                            <div class="contact-info">
+                                                <span class="contact-name text-ellipsis text-primary">DR. {{doctor.user.first_name}} {{doctor.user.last_name}}</span>
+                                                <span class="contact-date">Employee ID : {{doctor.employ_id}}</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
+                            <div class="card-footer text-center bg-silver">
+                                <a href="{% url 'patientDoctorList' %}" class="text-primary">View all Doctors</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        {% endblock %}
+
+    </div>
+
+    <script>
+        // Set the datetime we're counting down to
+        var end_time = new Date("{{reqTimer.end_period|date:'Y-m-d H:i:s'}}").getTime();
+
+        // Update the count down every 1 second
+        var x = setInterval(function() {
+
+            // Get end_time's date and time
+            var now = new Date().getTime();
+
+            // Find the distance between now and the count down date
+            var distance = end_time - now;
+
+            // Time calculations for days, hours, minutes and seconds
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Output the result in an element with id="demo"
+            document.getElementById("timer").innerHTML = hours + "h " +
+                minutes + "min " + seconds + "s";
+
+            // If the count down is over, write some text 
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("timer_container").style.display = "none";
+            }
+        }, 1000);
+    </script>
+
+    {% endblock %}
+
+</body>
+
+</html>
